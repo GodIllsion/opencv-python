@@ -1,0 +1,46 @@
+# Sobel算子
+sobelx = cv2.Sobel(imag, cv2.CV_64F, 1, 0, ksize=3) #右减左，即水平操作，CV_64F,正就是正，负就是负
+cv2.imshow("sobelx", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 白减黑是正数，黑减白就是负数了，所有的负数会被截断为0，所以要取绝对值
+sobelx = cv2.Sobel(imag, cv2.CV_64F, 1, 0, ksize=3)
+sobelx = cv2.convertScaleAbs(sobelx)
+cv2.imshow("sobelx", sobelx)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 下面求竖直方向上的边缘检测
+sobely = cv2.Sobel(imag, cv2.CV_64F, 0, 1, ksize=3)
+sobely = cv2.convertScaleAbs(sobely)
+cv2.imshow("sobely", sobely)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+#分别计算x和y，即水平方向和竖直方向上的边缘检测，然后求和，这样求出来的边缘更加清晰，不信后边有对比
+sobelxy = cv2.addWeighted(sobelx, 0.5, sobely, 0.5, 0)
+cv2.imshow("sobelxy", sobelxy)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 不建议直接计算，这样效果不好
+sobelxy = cv2.Sobel(imag, cv2.CV_64F, 1, 1, ksize=3)
+sobelxy = cv2.convertScaleAbs(sobelxy)
+cv2.imshow("sobelxy", sobelxy)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 再如人像图边缘检测
+# 这是分开计算的
+imag = cv2.imread("P:/Matlab_Practice/picture/child.PNG", cv2.IMREAD_GRAYSCALE)
+sobelx = cv2.Sobel(imag, cv2.CV_64F, 1, 0, ksize=3)
+sobelx = cv2.convertScaleAbs(sobelx)
+sobely = cv2.Sobel(imag, cv2.CV_64F, 0, 1, ksize=3)
+sobely = cv2.convertScaleAbs(sobely)
+sobelxy = cv2.addWeighted(sobelx, 0.5, sobely, 0.5, 0)
+cv2.imshow("sobelxy", sobelxy)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 这是直接计算的
+imag = cv2.imread("P:/Matlab_Practice/picture/child.PNG", cv2.IMREAD_GRAYSCALE)
+sobelxy = cv2.Sobel(imag, cv2.CV_64F, 1, 1, ksize=3)
+sobelxy = cv2.convertScaleAbs(sobelxy)
+cv2.imshow("sobelxy", sobelxy)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
