@@ -1,0 +1,23 @@
+# 原图
+imag = cv2.imread("P:/Matlab_Practice/picture/Poppy.PNG", cv2.IMREAD_GRAYSCALE)
+cv2.imshow("original_imag", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# Scharr算子
+# 可以捕捉更多的信息
+scharrx = cv2.Scharr(imag, cv2.CV_64F, 1, 0)
+scharry = cv2.Scharr(imag, cv2.CV_64F, 0, 1)
+scharrx = cv2.convertScaleAbs(scharrx)
+scharry = cv2.convertScaleAbs(scharry)
+scharrxy = cv2.addWeighted(scharrx, 0.5, scharrx, 0.5, 0)
+
+# Laplace算子
+# 容易收到噪声点的影响，所以一般不单独使用
+laplacian = cv2.Laplacian(imag, cv2.CV_64F)
+laplacian = cv2.convertScaleAbs(laplacian)
+
+res = numpy.hstack((imag, scharrxy, laplacian))
+cv2.imshow("original & Scharr & Laplace", res)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
