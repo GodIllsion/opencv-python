@@ -1,0 +1,13 @@
+# 原图
+imag = cv2.imread("P:/Matlab_Practice/picture/Poppy.PNG", cv2.IMREAD_GRAYSCALE)
+cv2.imshow("original_imag", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# Canny算子
+v1 = cv2.Canny(imag, 80, 150)
+v2 = cv2.Canny(imag, 50, 100)   #minVal更小，可以检测出来更多的信息
+res = numpy.hstack((v1, v2))
+cv2.imshow("Canny", res)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
