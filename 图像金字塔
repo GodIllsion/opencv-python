@@ -1,0 +1,32 @@
+import cv2  # opencv默认打开图像格式是BGR，而不是RGB
+import matplotlib
+import numpy
+from matplotlib import pyplot
+
+import opencv_test
+
+# 原图
+imag = cv2.imread("P:/Matlab_Practice/picture/Poppy.PNG")
+cv2.imshow("original_imag", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# 图像金字塔
+# 高斯金字塔
+up = cv2.pyrUp(imag)    #图像金字塔向上采样----即图像放大，变模糊，将原矩阵放大2倍，如：2*2变成4*4，多出的行列元素用0填充
+cv2.imshow("up", up)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+down = cv2.pyrDown(imag)    #图像金字塔向下取样-----图像缩小，变清晰，直接把图像矩阵的偶数列和偶数行的元素除去，如4*4变成2*2
+cv2.imshow("down", down)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 拉普拉斯金字塔
+# 结果图像=原图像-（原图像先进行高斯金字塔向下取样）再进行高斯金字塔向上取样，即res=imag-pyrup(pyrdown(imag))
+down = cv2.pyrDown(imag)
+down_up = cv2.pyrUp(down)
+imag = cv2.resize(imag, (582, 590)) #先使得原图像矩阵的行列数为偶数
+laplacePyr = imag - down_up
+cv2.imshow("laplacePyr", laplacePyr)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
