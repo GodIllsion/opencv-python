@@ -1,0 +1,25 @@
+import cv2  # opencv默认打开图像格式是BGR，而不是RGB
+import matplotlib
+import numpy
+from matplotlib import pyplot
+
+import opencv_test
+
+# 读入原图
+imag = cv2.imread("P:/Matlab_Practice/picture/contours.PNG")
+# 图像轮廓检测方法
+# 为了更高的准确率，使用二值图像
+gray = cv2.cvtColor(imag, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+cv2.imshow("thresh", thresh)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)   #RETE_TREE表示找出图像所有的轮廓
+# 绘制轮廓
+# 传入绘制图像，轮廓，轮廓索引（-1代表绘制出所有的轮廓，其他数如0代表绘制出图像中第一个图形的轮廓，也就是说图像中所有的轮廓是被标好顺序的），颜色模式（（B,G,R）模式，哪个不为0代表用什么颜色的线绘制轮廓），线条厚度
+# 注意绘制轮廓的图像要copy原图像，不然原图像会变化，也就是说，对图像进行轮廓绘制是会直接更改原图，因此copy一下，对copy以后的图像进行轮廓绘制
+draw_imag = imag.copy()
+res = cv2.drawContours(draw_imag, contours, -1, (0, 255, 0), 1) #在原图上画上轮廓
+cv2.imshow("res", res)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
