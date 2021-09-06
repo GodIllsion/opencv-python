@@ -1,0 +1,61 @@
+import cv2  # opencv默认打开图像格式是BGR，而不是RGB
+import matplotlib
+import numpy
+from matplotlib import pyplot
+
+import opencv_test
+
+# 读入原图
+imag = cv2.imread("P:/Matlab_Practice/picture/contours.PNG")
+gray = cv2.cvtColor(imag, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+cv2.imshow("thresh", thresh)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)   #RETE_TREE表示找出图像所有的轮廓
+# 轮廓特征
+# cnt = contours[0]
+# 面积
+# cv2.contourArea(cnt)
+# 周长，true代表是闭合的
+# cv2.arcLength(cnt, True)
+# 轮廓近似
+gray = cv2.cvtColor(imag, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+cv2.imshow("thresh", thresh)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)   #RETE_TREE表示找出图像所有的轮廓
+cnt = contours[0]
+draw_imag = imag.copy()
+res = cv2.drawContours(draw_imag, [cnt], -1, (0, 255, 0), 1)
+cv2.imshow("res", res)  #对照组一号
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+epsilon = 0.1*cv2.arcLength(cnt, True)  #阈值设置为0.1倍的周长
+approx = cv2.approxPolyDP(cnt, epsilon, True)
+draw_imag = imag.copy()
+res = cv2.drawContours(draw_imag, [approx], -1, (0, 255, 0), 1)
+cv2.imshow("res", res)  #对照组二号
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# 边界矩形（外接矩形）
+cnt = contours[0]
+x, y, w, h = cv2.boundingRect(cnt)
+imag = cv2.rectangle(imag, (x, y), (x+w, y+h), (0, 255, 0), 1)
+cv2.imshow("imag", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+area = cv2.contourArea(cnt)
+x, y, w, h = cv2.boundingRect(cnt)
+rect_area = w * h
+extent = float(area) / rect_area
+print("轮廓面积与边界矩形之比", extent)
+# 外接圆
+(x, y), radius = cv2.minEnclosingCircle(cnt)
+center = (int(x), int(y))
+radius = int(radius)
+imag = cv2.circle(imag, center, radius, (0, 255, 0), 1)
+cv2.imshow("imag", imag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
